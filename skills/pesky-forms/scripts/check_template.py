@@ -10,6 +10,7 @@ import json
 import sys
 from pathlib import Path
 
+import pdfplumber
 import pypdfium2 as pdfium
 from PIL import Image, ImageDraw
 from pypdf import PdfReader
@@ -22,6 +23,8 @@ LONG_SIDE = 1500
 
 def problems(template, form):
     pages = PdfReader(str(form)).pages
+    with pdfplumber.open(str(form)) as doc:
+        words = [pg.extract_words() for pg in doc.pages]
     out, ids = [], set()
     fields = template.get("fields", [])
     own = [{full_name(w): on_states(w) for w in widgets(p)} for p in pages]
@@ -51,8 +54,14 @@ def problems(template, form):
             out.append(f"{f['id']}: box {f['box']} is not inside the {W:.0f} x {H:.0f} page")
         if f["kind"] == "text" and bottom - top < 7:
             out.append(f"{f['id']}: box is {bottom - top:.1f} pt tall; text needs at least 7")
-        if f["kind"] == "signature" and bottom - top < 14:
-            out.append(f"{f['id']}: signature box is {bottom - top:.1f} pt tall; make it about 28 pt, ending on the line")
+        if f["kind"] == "signature" and bottom - top < 10:
+            out.append(f"{f['id']}: signature box is {bottom - top:.1f} pt tall; make it 10 to 28 pt, ending on the line")
+        if f["kind"] in ("signature", "initials"):
+            covered = [w["text"] for w in words[f["page"]] if "___" not in w["text"]
+                       and min(x1, w["x1"]) - max(x0, w["x0"]) > 1 and min(bottom, w["bottom"]) - max(top, w["top"]) > 2]
+            if covered:
+                out.append(f"{f['id']}: {f['kind']} box covers printed text \"{' '.join(covered[:6])}\"; "
+                           "lower its top or narrow it so the mark cannot land on the words")
         if f["kind"] == "initials" and bottom - top < 8:
             out.append(f"{f['id']}: initials box is {bottom - top:.1f} pt tall; use the whole printed box or about 14 pt above the line")
         if f["kind"] == "checkbox" and min(x1 - x0, bottom - top) < 6:
@@ -74,6 +83,17 @@ def problems(template, form):
     return out
 
 
+def sample_text(f):
+    """Placeholder shaped like a real answer: digits in digit boxes, a date where a date goes."""
+    if f["kind"] in ("checkbox", "signature", "initials"):
+        return "yes"
+    if f.get("cells"):
+        return "1234567890"[:int(f["cells"])]
+    if "MM/DD/YYYY" in f.get("hint", "").upper():
+        return "12/31/2026"
+    return f.get("sample") or "Sample answer"
+
+
 def sample_mark(path, text):
     im = Image.new("L", (40 + 22 * len(text), 90), 255)
     ImageDraw.Draw(im).text((10, 20), text, fill=0, font_size=40)
@@ -85,8 +105,7 @@ def main(template_path, form, out):
     out.mkdir(parents=True, exist_ok=True)
     template = json.loads(Path(template_path).read_text())
     found = problems(template, form)
-    sample = {f["id"]: ("yes" if f["kind"] in ("checkbox", "signature", "initials") else f.get("sample") or "Sample answer")
-              for f in template.get("fields", []) if "id" in f}
+    sample = {f["id"]: sample_text(f) for f in template.get("fields", []) if "id" in f}
     preview = out / "check-filled.pdf"
     fill(str(form), template, sample, str(preview), sample_mark(out / "sample-signature.png", "Signature (sample)"),
          sample_mark(out / "sample-initials.png", "AB"))

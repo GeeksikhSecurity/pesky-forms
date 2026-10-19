@@ -1,7 +1,7 @@
 # pesky-forms
 
-Field trips, camp, sports physicals, the W-9 for the new piano teacher. The forms keep coming,
-and they all want the same twenty facts about your family.
+Field trips, camp, sports physicals. The forms keep coming, and they all ask for the same
+facts about your family.
 
 pesky-forms is a Claude Code skill that fills PDF forms for you. Claude reads the blank form
 and works out every blank on it. Your answers come from a profile file on your Mac and are
@@ -26,9 +26,12 @@ answers to Claude.
    `NAME-answers.csv`, a list of questions, and `fill-NAME.py`, the script that fills this form.
 3. You open the answer sheet in Numbers or Excel. Rows linked to your profile fill themselves;
    you type the rest.
-4. You run the script in Terminal. It writes `NAME-filled.pdf`. You check it in Preview and sign.
+4. You run the script in Terminal. It checks the answers first (dates, digit counts, lengths,
+   one choice per question) and stops with the question to fix if something is off. Then it
+   writes `NAME-filled.pdf`. You check it in Preview and sign.
 
-Next year's copy of the same form reuses the kit. A second child is `--child 2`.
+A second child is `--child 2`, which writes `NAME-child2-filled.pdf`. The script will not
+replace a filled PDF you have edited or signed in Preview.
 
 ## What Claude sees, and what the workflow keeps from it
 
@@ -68,6 +71,7 @@ The first time, the skill sets up a small Python environment in `~/.pesky-forms/
    over the same file. It covers children, parents, home, emergency contacts, doctor and
    insurance. For more children, copy the `child1` rows as `child2`.
 3. Open `NAME-answers.csv`, answer what is new, and export it as CSV over the same file.
+   Type `blank` in a row to keep it empty even when your profile has a value.
 4. In Terminal: `~/.pesky-forms/venv/bin/python fill-NAME.py`
 5. Open `NAME-filled.pdf` in Preview, check every answer, sign.
 
@@ -87,7 +91,8 @@ records release. 164 blanks in all, scored by where each answer lands on the pag
 Each agent ran once per form. The agents linked 2 to 7 rows per form to profile keys; the
 rest were one-off questions such as trip dates and checkboxes.
 
-The harness is in `bench/`: it downloads the forms (pinned by hash), builds the test
+`tests/test_fill_script.py` checks the fill script's safeguards offline. The harness is in
+`bench/`: it downloads the forms (pinned by hash), builds the test
 versions, plays a perfect parent and scores the result. It needs PyMuPDF, which only the
 bench uses.
 
@@ -110,17 +115,15 @@ You accept these by using it. Read every filled PDF before you sign or send it.
   still shares those names.
 
 **Wrong or missing answers**
-- An empty sheet row means "use the profile". There is no way yet to force a profile-linked
-  blank to stay empty; delete the value in Preview afterward.
-- `--child 2` with a sheet that still holds the first child's typed answers mixes the two.
-  Each run overwrites `NAME-filled.pdf`, including any edits or signature added in Preview;
-  use `--out` to keep both.
-- Spreadsheets can strip leading zeros from ZIP codes and IDs and reformat dates. Check those.
-- Digit-box answers longer than the boxes are cut off. Long answers shrink to 6 pt and can clip.
-  Characters outside Latin-1 may not display.
-- Radio and choice answers are not validated: ticking two options of one question is allowed.
-- Signatures: a PDF signature takes the first stamp or ink mark in the file; one signature is
-  used for every signer; a box drawn too tall can overlap printed text.
+- The answer checks catch wrong digit counts, unreadable dates, answers too long for their box
+  and two ticks on one fillable-form question. They cannot tell a right answer from a wrong
+  one, and they cannot see "check one" groups on flat forms.
+- Spreadsheets can reformat values in ways that still pass the checks (a date read as another
+  date). Read the filled PDF.
+- Long answers shrink to as small as 6 pt. Characters outside Latin-1 may not display.
+- `--force` skips every check.
+- One signature and one set of initials are used for every signer, and a signature placed on a
+  crowded line can still touch nearby text.
 - Rotated or cropped pages, scans, password-protected PDFs and XFA-only forms are untested
   or unsupported. XFA data is removed from forms that also have regular fields.
 - Next year's form is a new file: if its bytes differ, make a new kit.

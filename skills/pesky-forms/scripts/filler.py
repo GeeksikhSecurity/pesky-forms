@@ -12,6 +12,8 @@ Preview; placed on "signature" and "initials" fields.
 The output is a fillable PDF: every blank is a real form field holding its answer, so a
 person can still correct any value in Preview. A placed signature is a stamp they can move or delete.
 """
+import datetime
+import re
 import zlib
 
 from pypdf import PdfReader, PdfWriter
@@ -19,6 +21,7 @@ from pypdf.generic import (ArrayObject, BooleanObject, DecodedStreamObject, Dict
                            NameObject, NumberObject, StreamObject, TextStringObject)
 
 TICKED = {"yes", "y", "x", "true", "checked", "check", "1", "✓", "✔"}
+UNTICKED = {"no", "n", "false", "0", "blank"}
 MIN_FONT = 6
 INK = (26, 35, 64)  # signature color, dark blue-black
 MARKS = ("signature", "initials")  # field kinds filled with the person's saved signature or initials
@@ -161,20 +164,23 @@ def _signature_image(writer, path):
 
 
 def _signature_pdf(writer, path):
-    """A PDF the person signed once in Preview (Markup > Sign): reuse that signature's drawing."""
+    """A PDF the person signed once in Preview (Markup > Sign): reuse that signature's drawing.
+    It must hold exactly one ink or stamp mark, so a stray note or a text box is never used."""
+    marks = []
     for page in PdfReader(path).pages:
-        for ref in page.get("/Annots") or []:
+        annots = page.get("/Annots")
+        for ref in annots.get_object() if annots else []:
             a = ref.get_object()
-            if a.get("/Subtype") in ("/Widget", "/Link", "/Popup") or "/AP" not in a:
-                continue
-            n = a["/AP"].get_object().get("/N")
-            if n is None or not hasattr(n.get_object(), "get_data"):
-                continue
-            form = n.get_object().clone(writer)
-            ref = form.indirect_reference or writer._add_object(form)
-            bx = [float(v) for v in form["/BBox"]]  # ponytail: ignores /Matrix; add it if a rotated signature lands wrong
-            return ref, bx, (bx[2] - bx[0]) / (bx[3] - bx[1])
-    raise ValueError("no signature found in the PDF: open it in Preview, add your signature with Markup > Sign, save")
+            n = a["/AP"].get_object().get("/N") if "/AP" in a else None
+            if a.get("/Subtype") in ("/Ink", "/Stamp") and n is not None and hasattr(n.get_object(), "get_data"):
+                marks.append(n.get_object())
+    if len(marks) != 1:
+        raise ValueError(f"{path} has {len(marks)} signature-like marks; it needs exactly one. Open a blank "
+                         "PDF in Preview, add only your signature with Markup > Sign, and save it under that name.")
+    form = marks[0].clone(writer)
+    ref = form.indirect_reference or writer._add_object(form)
+    bx = [float(v) for v in form["/BBox"]]  # ponytail: ignores /Matrix; add it if a rotated signature lands wrong
+    return ref, bx, (bx[2] - bx[0]) / (bx[3] - bx[1])
 
 
 def load_signature(writer, path):
@@ -203,6 +209,61 @@ def _place_signature(writer, page, f, sig):
     page.setdefault(NameObject("/Annots"), ArrayObject()).append(writer._add_object(annot))
 
 
+def _date(raw):
+    """MM/DD/YYYY from 1/5/2026, 01/05/26, 2026-01-05 and similar; None when it is not a real date."""
+    m = re.fullmatch(r"(\d{1,2})[/.-](\d{1,2})[/.-](\d{2}|\d{4})", raw)
+    y_first = re.fullmatch(r"(\d{4})[/.-](\d{1,2})[/.-](\d{1,2})", raw)
+    if m:
+        mo, d, y = int(m[1]), int(m[2]), int(m[3])
+    elif y_first:
+        y, mo, d = int(y_first[1]), int(y_first[2]), int(y_first[3])
+    else:
+        return None
+    if y < 100:
+        y += 2000 if y < 50 else 1900
+    try:
+        return datetime.date(y, mo, d).strftime("%m/%d/%Y")
+    except ValueError:
+        return None
+
+
+def check_answers(template, answers):
+    """Problems with the answers, as (question, problem) pairs that never quote a value.
+    Dates whose hint says MM/DD/YYYY are rewritten in that format in place."""
+    problems, ticked = [], {}
+    for f in template["fields"]:
+        raw = str(answers.get(f["id"], "") or "").strip()
+        if not raw:
+            continue
+        q, low = f["question"], raw.lower()
+        if f["kind"] in ("checkbox",) + MARKS:
+            if low not in TICKED | UNTICKED:
+                problems.append((q, "answer yes, no, or leave it empty"))
+            elif low in TICKED and f.get("pdf_field") and f.get("on"):
+                ticked.setdefault((f["page"], f["pdf_field"]), []).append(q)
+            continue
+        cells = int(f.get("cells", 0))
+        if cells:
+            chars = re.sub(r"[\s-]", "", raw)
+            if len(chars) != cells:
+                short = " (a spreadsheet may have dropped a leading zero)" if len(chars) < cells and chars.isdigit() else ""
+                problems.append((q, f"needs {cells} characters but has {len(chars)}{short}"))
+            continue
+        if "MM/DD/YYYY" in f.get("hint", "").upper():
+            date = _date(raw)
+            if not date:
+                problems.append((q, "is not a date like 12/31/2026"))
+                continue
+            answers[f["id"]] = raw = date
+        x0, top, x1, bottom = f["box"]
+        if not f.get("pdf_field") and len(raw) * 0.52 * MIN_FONT > x1 - x0 - 3:
+            problems.append((q, "is too long to fit its box even at the smallest size; shorten it"))
+    for qs in ticked.values():
+        if len(qs) > 1:
+            problems.append((qs[0], f"and {len(qs) - 1} other option(s) of the same question are all ticked; pick one"))
+    return problems
+
+
 def fill(form_pdf, template, answers, out_pdf, signature=None, initials=None):
     """Returns (filled ids, empty ids). Never prints or logs a value."""
     writer = PdfWriter(clone_from=PdfReader(form_pdf))
@@ -211,7 +272,9 @@ def fill(form_pdf, template, answers, out_pdf, signature=None, initials=None):
     res = DictionaryObject({NameObject("/Font"): fonts})
     own = [f for f in template["fields"] if f.get("pdf_field") and f["kind"] not in MARKS]
     filled, empty = _fill_existing(writer, own, answers) if own else ([], [])
-    marks = {k: load_signature(writer, path) for k, path in zip(MARKS, (signature, initials)) if path}
+    wanted = {f["kind"] for f in template["fields"]
+              if f["kind"] in MARKS and str(answers.get(f["id"], "")).strip().lower() in TICKED}
+    marks = {k: load_signature(writer, path) for k, path in zip(MARKS, (signature, initials)) if path and k in wanted}
     fields = ArrayObject()
     for f in template["fields"]:
         if f in own:
@@ -253,7 +316,7 @@ def fill(form_pdf, template, answers, out_pdf, signature=None, initials=None):
                 size = min(float(f.get("font_size", 10)), h * 0.8, cw * 1.3)
                 base = (h - size) / 2 + 0.22 * size
                 runs = " ".join(f"1 0 0 1 {i * cw + (cw - 0.55 * size) / 2:.2f} {base:.2f} Tm ({_esc(ch)}) Tj"
-                                for i, ch in enumerate(raw.replace(" ", "")[:cells]))
+                                for i, ch in enumerate(re.sub(r"[\s-]", "", raw)[:cells]))
                 body = f"/Tx BMC q BT /Helv {size:.2f} Tf 0 g {runs} ET Q EMC"
             elif raw:
                 size = _fit(raw, float(f.get("font_size", 10)), w, h)
@@ -266,7 +329,7 @@ def fill(form_pdf, template, answers, out_pdf, signature=None, initials=None):
                           NameObject("/AP"): DictionaryObject({NameObject("/N"): _stream(writer, w, h, body, res)})})
             if cells:  # comb field: viewers that redraw from /V (Apple PDFKit, Preview) keep one character per box
                 annot.update({NameObject("/Ff"): NumberObject(1 << 24), NameObject("/MaxLen"): NumberObject(cells),
-                              NameObject("/V"): TextStringObject(raw.replace(" ", "")[:cells])})
+                              NameObject("/V"): TextStringObject(re.sub(r"[\s-]", "", raw)[:cells])})
             (filled if raw else empty).append(f["id"])
         ref = writer._add_object(annot)
         page.setdefault(NameObject("/Annots"), ArrayObject()).append(ref)

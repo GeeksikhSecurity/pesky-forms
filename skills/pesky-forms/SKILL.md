@@ -55,8 +55,9 @@ python3 -m venv ~/.pesky-forms/venv && ~/.pesky-forms/venv/bin/pip install -q py
      and optional sections too. People can leave a row empty; they cannot add a blank you left
      out. Skip only sections marked for office, school or employer use, and anything already printed.
    - Each line the person signs is a `"kind": "signature"` field, question like
-     "Page 3: Your signature (parent or guardian)". Its box spans the signature line, about 28 pt
-     tall, with its bottom on the line: `[x0, line_y - 28, x1, line_y]`. A form's own signature
+     "Page 3: Your signature (parent or guardian)". Its box spans the signature line, up to 28 pt
+     tall (at least 10), with its bottom on the line: `[x0, line_y - 28, x1, line_y]`, and must
+     not cover printed words: on a tight form, lower its top until check_template stops flagging it. A form's own signature
      field (`signature` in the listing) uses that field's box, without `pdf_field`. Skip lines
      someone else signs (a school official, an employer). The date next to it is a text field.
    - Each small box or short line where the person writes their initials ("Initial here",
@@ -107,7 +108,8 @@ python3 -m venv ~/.pesky-forms/venv && ~/.pesky-forms/venv/bin/pip install -q py
 6. **Tell the person, as numbered steps:**
    1. Open `NAME-answers.csv` in Numbers or Excel and type each answer in "Your answer". For a
       checkbox, type yes or leave it empty. Use an app on this Mac, not an online spreadsheet.
-      Rows with a key in "From your profile" fill from your profile when left empty.
+      Rows with a key in "From your profile" fill from your profile when left empty; type
+      blank to keep one empty.
    2. Save as CSV: in Numbers, File > Export To > CSV, saved over the same file.
    3. First time only: copy this skill's `profile-template.csv` to `~/.pesky-forms/profile.csv`,
       fill in the Value column in Numbers, and export it as CSV over the same file. Every
@@ -117,8 +119,10 @@ python3 -m venv ~/.pesky-forms/venv && ~/.pesky-forms/venv/bin/pip install -q py
       or not) in the form's folder, or in `~/.pesky-forms/` to use them for every form. A blank
       PDF signed once in Preview (Markup > Sign), saved as `signature.pdf`, works too.
    5. In the Terminal app: `~/.pesky-forms/venv/bin/python ~/Documents/Forms/NAME/fill-NAME.py`
-      (add `--child 2` for a second child). It lists any blanks left empty and any profile
-      keys to add.
+      (add `--child 2` for a second child; that writes `NAME-child2-filled.pdf`). It checks the
+      answers first and writes nothing if a date, digit count, length or choice is off, telling
+      you which question to fix. It will not replace a filled PDF you edited or signed in Preview.
+      It lists any blanks left empty and any profile keys to add.
    6. Open `NAME-filled.pdf` in Preview, read every answer, fix any by typing into the field.
       Sign any signature line still empty (Preview: Markup > Sign, pick your saved signature,
       drag it onto the line). An added signature or initials can be moved, resized or deleted.
