@@ -122,6 +122,8 @@ You accept these by using it. Read every filled PDF before you sign or send it.
   date). Read the filled PDF.
 - Long answers shrink to as small as 6 pt. Characters outside Latin-1 may not display.
 - `--force` skips every check.
+- `"cover"` boxes hide printed placeholder text (such as "[Enter]" on a draft) under white.
+  The hidden text stays in the file, where search or copy can still find it.
 - One signature and one set of initials are used for every signer, and a signature placed on a
   crowded line can still touch nearby text.
 - Rotated or cropped pages, scans, password-protected PDFs and XFA-only forms are untested
