@@ -3,7 +3,8 @@
 # pesky-forms
 
 **Fill in those pesky school forms securely from your Mac.**<br>
-Claude reads the blank form. Your answers stay on your computer.
+Claude reads the blank form and marks where text needs to go.<br>
+Your answers stay on your computer and are filled in by a Python script.
 
 [![Tests](https://github.com/abe238/pesky-forms/actions/workflows/tests.yml/badge.svg)](https://github.com/abe238/pesky-forms/actions/workflows/tests.yml)
 [![Release](https://img.shields.io/github/v/release/abe238/pesky-forms?color=da3200)](https://github.com/abe238/pesky-forms/releases)
