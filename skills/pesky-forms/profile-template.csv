@@ -25,6 +25,10 @@ parent1.cell_phone,,
 parent1.work_phone,,
 parent1.email,,
 parent1.employer,,
+parent1.dob,,MM/DD/YYYY
+parent1.other_names,,"Alias or maiden name, or None"
+parent1.drivers_license,,"License number"
+parent1.drivers_license_state,,"Two letters, like WA"
 parent2.full_name,,
 parent2.first_name,,
 parent2.last_name,,
@@ -34,6 +38,10 @@ parent2.cell_phone,,
 parent2.work_phone,,
 parent2.email,,
 parent2.employer,,
+parent2.dob,,MM/DD/YYYY
+parent2.other_names,,"Alias or maiden name, or None"
+parent2.drivers_license,,"License number"
+parent2.drivers_license_state,,"Two letters, like WA"
 home.street,,"Number and street, apartment"
 home.city,,
 home.state,,

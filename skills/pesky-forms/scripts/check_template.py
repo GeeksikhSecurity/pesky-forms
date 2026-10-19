@@ -56,7 +56,7 @@ def problems(template, form):
             out.append(f"{f['id']}: box is {bottom - top:.1f} pt tall; text needs at least 7")
         if f["kind"] == "signature" and bottom - top < 10:
             out.append(f"{f['id']}: signature box is {bottom - top:.1f} pt tall; make it 10 to 28 pt, ending on the line")
-        if f["kind"] in ("signature", "initials"):
+        if f["kind"] in ("signature", "initials") and not f.get("cover"):  # a cover box hides that text on purpose
             covered = [w["text"] for w in words[f["page"]] if "___" not in w["text"]
                        and min(x1, w["x1"]) - max(x0, w["x0"]) > 1 and min(bottom, w["bottom"]) - max(top, w["top"]) > 2]
             if covered:

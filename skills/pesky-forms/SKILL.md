@@ -78,6 +78,9 @@ python3 -m venv ~/.pesky-forms/venv && ~/.pesky-forms/venv/bin/pip install -q py
      an SSN printed as 3, 2 and 4 boxes is three fields, "Social security number, first 3
      digits" with `"cells": 3`, and so on.
    - `font_size` 10; use 8 for tight boxes.
+   - `"cover": true` when the blank already holds printed placeholder text, such as a draft
+     with "[Enter]" or "Name: [add surname]": the box spans the placeholder and the answer is
+     written on white over it. Leave printed text that is already a final answer alone.
    - `profile`: the profile key whose value answers this blank exactly, if one does
      ("Student's date of birth" is `child.dob`; "Parent/guardian cell" is `parent1.cell_phone`).
      Use `child.` keys, not `child1.`: the person picks the child when they run the script.

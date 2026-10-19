@@ -4,6 +4,7 @@ only when a signature or initials photo is used).
 
 template: {"fields": [{"id", "page", "kind": "text"|"checkbox"|"signature"|"initials", "question", "box": [x0, top, x1, bottom],
            "font_size", "cells" (optional: N equal printed boxes, one character each),
+           "cover" (optional: paint white under the answer to hide printed placeholder text),
            "pdf_field" (optional: the form's own field to fill, by full name), "on" (its checkbox state)}]}
            box is in PDF points with the origin at the TOP-left of the page.
 answers:  {field id: text}  checkbox, signature and initials answers count as yes for yes/y/x/true/checked/1.
@@ -199,7 +200,8 @@ def _place_signature(writer, page, f, sig):
     dx = (bw - w) / 2 if f["kind"] == "initials" else 0
     sx, sy = w / (bx[2] - bx[0]), h / (bx[3] - bx[1])
     res = DictionaryObject({NameObject("/XObject"): DictionaryObject({NameObject("/Sig"): xobj})})
-    ap = _stream(writer, bw, bh, f"q {sx:.4f} 0 0 {sy:.4f} {dx - bx[0] * sx:.2f} {-bx[1] * sy:.2f} cm /Sig Do Q", res)
+    white = f"q 1 g 0 0 {bw:.2f} {bh:.2f} re f Q " if f.get("cover") else ""  # hide printed placeholder text
+    ap = _stream(writer, bw, bh, white + f"q {sx:.4f} 0 0 {sy:.4f} {dx - bx[0] * sx:.2f} {-bx[1] * sy:.2f} cm /Sig Do Q", res)
     annot = DictionaryObject({
         NameObject("/Type"): NameObject("/Annot"), NameObject("/Subtype"): NameObject("/Stamp"),
         NameObject("/Rect"): ArrayObject([FloatObject(v) for v in (x0, H - bottom, x1, H - top)]),
@@ -324,6 +326,9 @@ def fill(form_pdf, template, answers, out_pdf, signature=None, initials=None):
                 body = f"/Tx BMC q BT /Helv {size:.2f} Tf 0 g 2 {base:.2f} Td ({_esc(raw)}) Tj ET Q EMC"
             else:
                 size, body = float(f.get("font_size", 10)), "/Tx BMC EMC"
+            if f.get("cover"):  # a white box hides printed placeholder text such as "[Enter]"
+                body = f"q 1 g 0 0 {w:.2f} {h:.2f} re f Q " + body
+                annot[NameObject("/MK")] = DictionaryObject({NameObject("/BG"): ArrayObject([FloatObject(1)])})
             annot.update({NameObject("/FT"): NameObject("/Tx"), NameObject("/V"): TextStringObject(raw),
                           NameObject("/DA"): TextStringObject(f"/Helv {size:.2f} Tf 0 g"),
                           NameObject("/AP"): DictionaryObject({NameObject("/N"): _stream(writer, w, h, body, res)})})
