@@ -1,0 +1,15 @@
+[
+ {"name": "w9", "title": "IRS Form W-9", "url": "https://www.irs.gov/pub/irs-pdf/fw9.pdf",
+  "sha256": "2d420cbb4123dcf1fb82595b2359cfbb5d81f00b9df9d359fcc7af361d093f53"},
+ {"name": "w4", "title": "IRS Form W-4", "url": "https://www.irs.gov/pub/irs-pdf/fw4.pdf",
+  "sha256": "92444d8856ce55d9e25dca8b6d1420634fc68b11e1ab1f760916ea29ddd312b2"},
+ {"name": "dcps", "title": "DC Public Schools field trip permission",
+  "url": "https://dcps.dc.gov/sites/default/files/dc/sites/dcps/publication/attachments/J15_Field%20Trip%20Permission%20Form_Fillable.pdf",
+  "sha256": "3e0c4703c1508489a48fd67e44eef0529443eb2ed4e3316ec424153e70858529"},
+ {"name": "valley", "title": "Valley Medical Center records release (WA)",
+  "url": "https://valleymed.org/globalassets/valley-medical/media/files/patients-and-visitors/consent-forms/authorization-to-release-phi/9623371.13-auth-to-release-phi---fillable.pdf",
+  "sha256": "0e20cfddd679fafec31d82cfa9cec3cfd69e6195931e742c7b6f2c86d66ba7c3"},
+ {"name": "arlington", "title": "Arlington Public Schools field trip permission",
+  "url": "https://arlington.ss5.sharpschool.com/UserFiles/Servers/Server_3164237/File/District%20Forms/2000%20Instruction/Form%202320F1%20Field%20Trip%20Permission.pdf",
+  "sha256": "6f2c6f64bd28b45df1550bb991392c284781f1b0d171757a95d190e9ee9c9419"}
+]

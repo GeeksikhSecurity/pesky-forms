@@ -1,0 +1,373 @@
+{
+ "w9": {
+  "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].f1_03[0]": {
+   "label": "LLC tax classification letter (C, S, or P)",
+   "value": "S"
+  },
+  "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[6]": {
+   "label": "3a Other (see instructions) checkbox"
+  },
+  "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].f1_04[0]": {
+   "label": "3a Other (see instructions) write-in"
+  },
+  "topmostSubform[0].Page1[0].f1_05[0]": {
+   "label": "4 Exempt payee code (if any)",
+   "value": "5"
+  },
+  "topmostSubform[0].Page1[0].f1_06[0]": {
+   "label": "4 Exemption from FATCA reporting code (if any)",
+   "value": "A"
+  },
+  "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_2[0]": {
+   "label": "3b checkbox: has foreign partners, owners, or beneficiaries"
+  },
+  "topmostSubform[0].Page1[0].f1_09[0]": {
+   "label": "Requester's name and address (optional)",
+   "value": "Example Corp, 9 Main St"
+  },
+  "topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_08[0]": {
+   "label": "6 City, state, and ZIP code",
+   "value": "Testville, WA 98016"
+  },
+  "topmostSubform[0].Page1[0].f1_11[0]": {
+   "label": "Social security number, first 3 digits",
+   "value": "000"
+  },
+  "topmostSubform[0].Page1[0].f1_12[0]": {
+   "label": "Social security number, middle 2 digits",
+   "value": "12"
+  },
+  "topmostSubform[0].Page1[0].f1_13[0]": {
+   "label": "Social security number, last 4 digits",
+   "value": "3456"
+  },
+  "topmostSubform[0].Page1[0].f1_14[0]": {
+   "label": "Employer identification number, first 2 digits",
+   "blank": true
+  },
+  "topmostSubform[0].Page1[0].f1_15[0]": {
+   "label": "Employer identification number, last 7 digits",
+   "blank": true
+  }
+ },
+ "w4": {
+  "topmostSubform[0].Page1[0].Step1a[0].f1_01[0]": {
+   "label": "Step 1(a) First name and middle initial",
+   "value": "Jordan T"
+  },
+  "topmostSubform[0].Page1[0].Step1a[0].f1_02[0]": {
+   "label": "Step 1 Last name",
+   "value": "Testperson"
+  },
+  "topmostSubform[0].Page1[0].f1_05[0]": {
+   "label": "Step 1(b) Social security number",
+   "value": "000-12-3456"
+  },
+  "topmostSubform[0].Page1[0].Step1a[0].f1_03[0]": {
+   "label": "Step 1 Address",
+   "value": "103 Example St"
+  },
+  "topmostSubform[0].Page1[0].Step1a[0].f1_04[0]": {
+   "label": "Step 1 City or town, state, and ZIP code",
+   "value": "Testville, WA 98004"
+  },
+  "topmostSubform[0].Page1[0].c1_2[0]": {
+   "label": "Step 2(c) checkbox: only two jobs total"
+  },
+  "topmostSubform[0].Page1[0].c1_3[0]": {
+   "label": "Exempt from withholding checkbox"
+  },
+  "topmostSubform[0].Page1[0].f1_12[0]": {
+   "label": "Employers Only: Employer's name and address",
+   "blank": true
+  },
+  "topmostSubform[0].Page1[0].f1_13[0]": {
+   "label": "Employers Only: First date of employment",
+   "blank": true
+  },
+  "topmostSubform[0].Page1[0].f1_14[0]": {
+   "label": "Employers Only: Employer identification number (EIN)",
+   "blank": true
+  },
+  "topmostSubform[0].Page3[0].f3_05[0]": {
+   "label": "Multiple Jobs Worksheet line 3 (number of pay periods per year)",
+   "value": "26"
+  }
+ },
+ "dcps": {
+  "My child does not have a Medication Plan on file at school and will not require the": {
+   "label": "7. My child does not have a Medication Plan on file"
+  },
+  "My child has a Medication Plan on file at school and will need to have this medication available": {
+   "label": "7. My child has a Medication Plan; is not authorized to self-administer"
+  },
+  "My child has a Medication Plan on file at school and will need to have the medication available": {
+   "label": "7. My child has a Medication Plan; is authorized to self-administer"
+  },
+  "Name of Parent Legal Guardian": {
+   "label": "Name of Parent, Legal Guardian, Participating Adult, or Student 18+ (Printed)",
+   "value": "Jordan Testperson"
+  },
+  "Date": {
+   "label": "Date (next to the signature)",
+   "value": "04/20/2026"
+  },
+  "Address of Parent Legal Guardian Participating Adult or Adult Student": {
+   "label": "Address of Parent, Legal Guardian, Participating Adult, or Adult Student",
+   "value": "116 Example St, Washington, DC 20001"
+  },
+  "Phone Number of Parent Legal Guardian Participating Adult or Adult Student": {
+   "label": "Phone Number of Parent, Legal Guardian, Participating Adult, or Adult Student",
+   "value": "555-0117"
+  },
+  "Emergency Contact Name": {
+   "label": "Emergency Contact Name",
+   "value": "Riley Sample"
+  },
+  "Emergency Contract Phone Number": {
+   "label": "Emergency Contact Phone Number",
+   "value": "555-0119"
+  },
+  "Trip Destination": {
+   "label": "Trip Destination",
+   "value": "National Zoo"
+  },
+  "School Name": {
+   "label": "School Name",
+   "value": "Example Elementary"
+  }
+ },
+ "valley": {
+  "Name  Last First MI": {
+   "label": "1. Patient: Name  Last First MI"
+  },
+  "Former Name(s)/Alias": {
+   "label": "1. Patient: Former Name(s)/Alias"
+  },
+  "Street Address": {
+   "label": "1. Patient: Street Address"
+  },
+  "City": {
+   "label": "1. Patient: City"
+  },
+  "State": {
+   "label": "1. Patient: State"
+  },
+  "Zip Code": {
+   "label": "1. Patient: Zip Code"
+  },
+  "Email Address": {
+   "label": "1. Patient: Email Address"
+  },
+  "Date of Birth": {
+   "label": "1. Patient: Date of Birth"
+  },
+  "Phone": {
+   "label": "1. Patient: Phone"
+  },
+  "Attorney": {
+   "label": "2. Purpose: Attorney"
+  },
+  "Insurance": {
+   "label": "2. Purpose: Insurance"
+  },
+  "PFMLA": {
+   "label": "2. Purpose: PFMLA"
+  },
+  "Other (specify)": {
+   "label": "2. Purpose: Other (specify) write-in",
+   "value": "Second opinion"
+  },
+  "Provider": {
+   "label": "2. Purpose: Provider"
+  },
+  "Personal": {
+   "label": "2. Purpose: Personal"
+  },
+  "Other specify": {
+   "label": "2. Purpose: Other specify"
+  },
+  "Valley Medical Center VMC  Clinics": {
+   "label": "3. Facility releasing records: Valley Medical Center VMC  Clinics"
+  },
+  "Provider/Clinic Name": {
+   "label": "3. Facility releasing records: Provider/Clinic Name",
+   "value": "Example Clinic"
+  },
+  "ProviderClinic Please send this form directly to nonVMC Providers": {
+   "label": "3. Facility releasing records: ProviderClinic Please send this form directly to nonVMC Providers"
+  },
+  "Provider/Clinic Address": {
+   "label": "3. Facility releasing records: Provider/Clinic Address"
+  },
+  "Provider/Clinic Phone": {
+   "label": "3. Facility releasing records: Provider/Clinic Phone"
+  },
+  "Provider/Clinic Fax": {
+   "label": "3. Facility releasing records: Provider/Clinic Fax"
+  },
+  "Recipient Name": {
+   "label": "4. Recipient: Name",
+   "value": "Taylor Mockup"
+  },
+  "Attention To": {
+   "label": "4. Recipient: Attention To",
+   "value": "Records Desk"
+  },
+  "Recipient Phone": {
+   "label": "4. Recipient: Recipient Phone"
+  },
+  "Recipient Fax": {
+   "label": "4. Recipient: Fax",
+   "value": "555-0125"
+  },
+  "Recipient Email": {
+   "label": "4. Recipient: Recipient Email"
+  },
+  "Recipient Street Address": {
+   "label": "4. Recipient: Recipient Street Address"
+  },
+  "Recipient City": {
+   "label": "4. Recipient: City",
+   "value": "Testville"
+  },
+  "Recipient State": {
+   "label": "4. Recipient: State",
+   "value": "WA"
+  },
+  "Recipient Zip Code": {
+   "label": "4. Recipient: Recipient Zip Code"
+  },
+  "Date From_es_:signer:date": {
+   "label": "5. Records: Date From"
+  },
+  "Date To_es_:signer:date": {
+   "label": "5. Records: Date range, to",
+   "value": "06/30/2026"
+  },
+  "Most Recent 2 Years default if no dates listed": {
+   "label": "5. Records: Most Recent 2 Years default if no dates listed"
+  },
+  "Medical Records": {
+   "label": "5. Records: Medical Records"
+  },
+  "Billing Records": {
+   "label": "5. Records: Billing Records"
+  },
+  "Immunizations": {
+   "label": "5. Records: Immunizations"
+  },
+  "Radiology Images": {
+   "label": "5. Records: Radiology Images"
+  },
+  "Clinic Notes": {
+   "label": "5. Records: Clinic Notes"
+  },
+  "Labs and Pathology": {
+   "label": "5. Records: Labs and Pathology"
+  },
+  "Procedures": {
+   "label": "5. Records: Procedures"
+  },
+  "Radiology Reports": {
+   "label": "5. Records: Radiology Reports"
+  },
+  "Other (please specify)": {
+   "label": "5. Records: Other (please specify) write-in",
+   "value": "Dental records"
+  },
+  "Other please specify": {
+   "label": "5. Records: Other please specify"
+  },
+  "I authorize VERBAL COMMUNICATION about my medical history and care Checking this box means no physical records will be sent unless": {
+   "label": "Verbal communication: I authorize VERBAL COMMUNICATION about my medical history and care Checking this box means no physical records will be sent unless"
+  },
+  "HIVAIDS and STD test results diagnosis or treatment records RCW 7002220": {
+   "label": "Sensitive records: HIVAIDS and STD test results diagnosis or treatment records RCW 7002220"
+  },
+  "Mental health records RCW 7002230 or 240": {
+   "label": "Sensitive records: Mental health records RCW 7002230 or 240"
+  },
+  "Substance Use Disorder records 42 CFR Part 2": {
+   "label": "Sensitive records: Substance Use Disorder records 42 CFR Part 2"
+  },
+  "CDDVD required PDF viewer": {
+   "label": "6. Format: CDDVD required PDF viewer"
+  },
+  "Paper": {
+   "label": "6. Format: Paper"
+  },
+  "MyChart": {
+   "label": "6. Format: MyChart"
+  },
+  "USBThumb Drive": {
+   "label": "6. Format: USBThumb Drive"
+  },
+  "Email see page 3": {
+   "label": "6. Format: Email see page 3"
+  },
+  "Valid Until Date_es_:date": {
+   "label": "7. This authorization is valid until (date)",
+   "value": "12/31/2026"
+  },
+  "Event": {
+   "label": "7. OR when the following event occurs",
+   "value": "End of treatment"
+  },
+  "Signature Patient or Person Authorized to Give Authorization": {
+   "label": "Signature (Patient or Person Authorized)",
+   "blank": true
+  },
+  "Signature Date_es_:date": {
+   "label": "Signature block: Signature Date"
+  },
+  "If Signed by Person Other Than Patient Provide Printed Name Reason Relationship to Patient Description of Their Authority": {
+   "label": "If signed by person other than patient: printed name, reason, relationship",
+   "blank": true
+  }
+ },
+ "arlington": {
+  "Text1": {
+   "label": "School Name",
+   "value": "Example Elementary"
+  },
+  "Text3": {
+   "label": "Teacher",
+   "value": "Riley Sample"
+  },
+  "Text8": {
+   "label": "Transportation: Other write-in box",
+   "value": "Charter bus"
+  },
+  "Check Box7": {
+   "label": "Transportation: Other checkbox"
+  },
+  "Text9": {
+   "label": "Field trip destination and itinerary",
+   "value": "Science Center, 9am to 2pm"
+  },
+  "Check Box11": {
+   "label": "Itinerary and/or additional information attached (checkbox)"
+  },
+  "Text12": {
+   "label": "The field trip will leave the school at",
+   "value": "9:00 AM"
+  },
+  "Text13": {
+   "label": "and will return to school at",
+   "value": "2:30 PM"
+  },
+  "Text14": {
+   "label": "The cost of the field trip is",
+   "value": "$12.00"
+  },
+  "Text15": {
+   "label": "Cost for chaperone is",
+   "value": "$8.00"
+  },
+  "Text16": {
+   "label": "Special notes for this field trip",
+   "value": "Bring a sack lunch"
+  }
+ }
+}

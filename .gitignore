@@ -1,0 +1,12 @@
+# Personal data never belongs in this repo.
+profile.csv
+*-answers.csv
+*-filled.pdf
+signature.*
+initials.*
+test-profile.csv
+work/
+.venv/
+venv/
+__pycache__/
+.DS_Store

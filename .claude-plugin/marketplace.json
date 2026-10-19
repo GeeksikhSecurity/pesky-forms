@@ -1,0 +1,14 @@
+{
+  "name": "pesky-forms",
+  "owner": {
+    "name": "abe238"
+  },
+  "description": "pesky-forms: a Claude Code skill for filling PDF forms from a profile on your Mac.",
+  "plugins": [
+    {
+      "name": "pesky-forms",
+      "source": "./",
+      "description": "Fill school and other PDF forms from a profile on your Mac. Claude reads the blank form; your answers stay on your computer."
+    }
+  ]
+}

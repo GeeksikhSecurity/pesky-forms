@@ -1,0 +1,58 @@
+Key,Value,Notes
+child1.first_name,,"First child. Copy these child1 rows as child2, child3 for more children"
+child1.middle_name,,
+child1.last_name,,
+child1.full_name,,"As the school has it"
+child1.preferred_name,,
+child1.dob,,MM/DD/YYYY
+child1.age,,
+child1.gender,,
+child1.grade,,
+child1.school,,
+child1.teacher,,
+child1.student_id,,
+child1.allergies,,"Or none"
+child1.medications,,"Or none"
+child1.medical_conditions,,"Or none"
+child1.dietary_needs,,
+child1.has_medical_insurance,,"yes or leave empty"
+parent1.full_name,,
+parent1.first_name,,
+parent1.last_name,,
+parent1.relationship,,"Mother, father, guardian"
+parent1.phone,,"Best number"
+parent1.cell_phone,,
+parent1.work_phone,,
+parent1.email,,
+parent1.employer,,
+parent2.full_name,,
+parent2.first_name,,
+parent2.last_name,,
+parent2.relationship,,
+parent2.phone,,
+parent2.cell_phone,,
+parent2.work_phone,,
+parent2.email,,
+parent2.employer,,
+home.street,,"Number and street, apartment"
+home.city,,
+home.state,,
+home.zip,,
+home.address_full,,"Street, city, state ZIP on one line"
+home.phone,,
+emergency1.full_name,,"Not a parent"
+emergency1.relationship,,
+emergency1.phone,,
+emergency2.full_name,,
+emergency2.relationship,,
+emergency2.phone,,
+doctor.name,,
+doctor.practice,,
+doctor.phone,,
+dentist.name,,
+dentist.phone,,
+insurance.company,,
+insurance.member_id,,
+insurance.group_number,,
+insurance.policy_holder,,
+insurance.phone,,
