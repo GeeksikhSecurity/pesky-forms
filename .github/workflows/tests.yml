@@ -1,0 +1,14 @@
+name: tests
+on:
+  push:
+  pull_request:
+jobs:
+  fill-script:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pypdf pdfplumber pypdfium2 pillow
+      - run: python tests/test_fill_script.py

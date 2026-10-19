@@ -1,4 +1,19 @@
+<div align="center">
+
 # pesky-forms
+
+**Fill in those pesky school forms securely from your Mac.**<br>
+Claude reads the blank form. Your answers stay on your computer.
+
+[![Tests](https://github.com/abe238/pesky-forms/actions/workflows/tests.yml/badge.svg)](https://github.com/abe238/pesky-forms/actions/workflows/tests.yml)
+[![Release](https://img.shields.io/github/v/release/abe238/pesky-forms?color=da3200)](https://github.com/abe238/pesky-forms/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-151b24)](LICENSE)
+[![Claude Code skill](https://img.shields.io/badge/Claude%20Code-skill-da3200)](https://docs.claude.com/en/docs/claude-code)
+[![macOS](https://img.shields.io/badge/platform-macOS-151b24)](#known-risks)
+
+<img src="docs/images/before-after-permission-slip.png" alt="Before: the blank signature page of a school field trip form. After: the same page with a parent's name, signature, date, address, phone and emergency contact filled in." width="100%">
+
+</div>
 
 Field trips, camp, sports physicals. The forms keep coming, and they all ask for the same
 facts about your family.
@@ -7,6 +22,13 @@ pesky-forms is a Claude Code skill that fills PDF forms for you. Claude reads th
 and works out every blank on it. Your answers come from a profile file on your Mac and are
 written into the PDF by a small script that runs on your Mac. The workflow never sends your
 answers to Claude.
+
+```
+/plugin marketplace add abe238/pesky-forms
+/plugin install pesky-forms@pesky-forms
+```
+
+Then, in Claude Code: *"Help me fill out this form"*, and give it the PDF.
 
 ## What you get
 
@@ -18,36 +40,40 @@ answers to Claude.
   one-digit-per-box number fields, signature lines and "initial here" boxes.
 - **Your signature, if you want it.** Snap a photo of your signature on white paper once;
   the script places it on every signature line as a stamp you can move or delete.
+- **Checks before it writes.** Dates, digit counts, lengths and one-choice questions are
+  checked first. If something is off, it names the question and writes nothing.
 
-## How it works
+## What Claude sees, and what stays on your Mac
 
-1. You give Claude the blank form.
-2. Claude finds each blank, checks its placement with sample text, and writes two files:
-   `NAME-answers.csv`, a list of questions, and `fill-NAME.py`, the script that fills this form.
-3. You open the answer sheet in Numbers or Excel. Rows linked to your profile fill themselves;
-   you type the rest.
-4. You run the script in Terminal. It checks the answers first (dates, digit counts, lengths,
-   one choice per question) and stops with the question to fix if something is off. Then it
-   writes `NAME-filled.pdf`. You check it in Preview and sign.
-
-A second child is `--child 2`, which writes `NAME-child2-filled.pdf`. The script will not
-replace a filled PDF you have edited or signed in Preview.
-
-## What Claude sees, and what the workflow keeps from it
-
-| Claude sees | The workflow keeps from Claude |
-|---|---|
-| The blank form | Your answers in the sheet |
-| The names of your profile's rows (`child.dob`) | The values in your profile |
-| The questions it wrote | The filled PDF |
-| | Your signature and initials |
+<img src="docs/images/who-sees-what.png" alt="Claude sees the blank form, the names of your profile's rows such as child.dob, and the questions it writes. Your profile's values, your answers, your signature photo and the filled PDF stay on your Mac." width="100%">
 
 The fill script makes no network connections and prints only which questions were left
 empty. The skill tells Claude never to open your profile, your answers or the filled PDF, and
 never to run the fill script for you; you run it in your own Terminal app.
 
 Claude Code can read files on your computer, so these are rules Claude follows, backed by a
-design that never needs your values. They are not a lock. See Known risks below.
+design that never needs your values. They are not a lock. See [Known risks](#known-risks).
+
+## How it works
+
+1. You give Claude the blank form.
+2. Claude finds each blank, checks its placement with sample text, and writes two files:
+   `NAME-answers.csv`, a list of questions, and `fill-NAME.py`, the script that fills this form.
+3. You open the answer sheet in Numbers or Excel and type only what is new. Rows linked to
+   your profile can stay empty.
+4. You run the script in Terminal. It checks the answers, fills empty profile rows from your
+   profile, and writes `NAME-filled.pdf`. You check it in Preview and sign.
+
+<img src="docs/images/answer-sheet.png" alt="The answer sheet in a spreadsheet: questions, the answers typed for this trip, and the profile keys that fill the other rows." width="100%">
+
+A second child is `--child 2`, which writes `NAME-child2-filled.pdf`. The script will not
+replace a filled PDF you have edited or signed in Preview.
+
+### Tax forms too
+
+<img src="docs/images/after-w9.png" alt="An IRS Form W-9 filled from a flat PDF: name, the individual tax classification ticked, address, a social security number one digit per box, signature and date." width="100%">
+
+<sub>All names, numbers and signatures in these images are made up.</sub>
 
 ## Install
 
