@@ -8,6 +8,7 @@ The fill script embeds the template and the form's sha256, so it only fills that
 import csv
 import hashlib
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -68,7 +69,7 @@ def read_profile(path, child):
 
 def main():
     ap = argparse.ArgumentParser(description="Fill @@TITLE@@ on this Mac.")
-    ap.add_argument("form", nargs="?", default=HERE / "@@FORM@@", type=Path)
+    ap.add_argument("form", nargs="?", default=HERE / @@FORM@@, type=Path)
     ap.add_argument("sheet", nargs="?", default=HERE / "@@NAME@@-answers.csv", type=Path)
     ap.add_argument("--child", type=int, default=1, help="which child in your profile (child1, child2, ...)")
     ap.add_argument("--profile", type=Path, default=HOME / "profile.csv")
@@ -126,8 +127,13 @@ def main(template_path, form, out, name):
             w.writerow([f["question"], "", how, f.get("profile", ""), f["id"]])
     filler = (HERE / "filler.py").read_text().split('"""', 2)[2].strip()  # drop the module docstring
     text = SCRIPT
-    for key, value in (("@@TITLE@@", template.get("title", name)), ("@@NAME@@", name),
-                       ("@@FORM@@", Path(form).name), ("@@SHA@@", hashlib.sha256(Path(form).read_bytes()).hexdigest()),
+    # Form-derived text becomes data, never code: the title is reduced to plain characters, NAME
+    # must be a plain file name, and the form's file name goes in as a Python literal.
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,80}", name):
+        sys.exit("NAME must be letters, digits, dot, dash or underscore, like field-trip-2026")
+    title = re.sub(r"[^A-Za-z0-9 .,:;()&'/-]", " ", str(template.get("title", name)))[:120].strip() or name
+    for key, value in (("@@TITLE@@", title), ("@@NAME@@", name),
+                       ("@@FORM@@", repr(Path(form).name)), ("@@SHA@@", hashlib.sha256(Path(form).read_bytes()).hexdigest()),
                        ("@@TEMPLATE@@", json.dumps(template, indent=1)), ("@@FILLER@@", filler)):
         text = text.replace(key, value)
     (out / f"fill-{name}.py").write_text(text)

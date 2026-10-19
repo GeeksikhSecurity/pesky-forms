@@ -5,7 +5,8 @@ and they all want the same twenty facts about your family.
 
 pesky-forms is a Claude Code skill that fills PDF forms for you. Claude reads the blank form
 and works out every blank on it. Your answers come from a profile file on your Mac and are
-written into the PDF by a small script that runs on your Mac. Claude never sees them.
+written into the PDF by a small script that runs on your Mac. The workflow never sends your
+answers to Claude.
 
 ## What you get
 
@@ -29,9 +30,9 @@ written into the PDF by a small script that runs on your Mac. Claude never sees 
 
 Next year's copy of the same form reuses the kit. A second child is `--child 2`.
 
-## What Claude sees, and what it never sees
+## What Claude sees, and what the workflow keeps from it
 
-| Claude sees | Claude never sees |
+| Claude sees | The workflow keeps from Claude |
 |---|---|
 | The blank form | Your answers in the sheet |
 | The names of your profile's rows (`child.dob`) | The values in your profile |
@@ -42,9 +43,8 @@ The fill script makes no network connections and prints only which questions wer
 empty. The skill tells Claude never to open your profile, your answers or the filled PDF, and
 never to run the fill script for you; you run it in your own Terminal app.
 
-One limit, stated plainly: Claude Code can read files on your computer, so these are rules
-Claude follows, backed by a design that never needs your values. They are not a lock. If you
-want a lock, keep `profile.csv` somewhere Claude Code is not allowed to read.
+Claude Code can read files on your computer, so these are rules Claude follows, backed by a
+design that never needs your values. They are not a lock. See Known risks below.
 
 ## Install
 
@@ -91,14 +91,44 @@ The harness is in `bench/`: it downloads the forms (pinned by hash), builds the 
 versions, plays a perfect parent and scores the result. It needs PyMuPDF, which only the
 bench uses.
 
-## Limits
+## Known risks
 
-- Tested on macOS with Claude Code. Other platforms may work; they are untested.
-- One run per form in the tests above. Results can vary between runs, so check every
-  filled PDF before you sign.
-- Forms built with XFA only (some government forms) are not supported. Scanned forms are untested.
-- A signature photo works best in dark pen on plain white paper.
-- Right-to-left and CJK text are untested.
+You accept these by using it. Read every filled PDF before you sign or send it.
+
+**Privacy**
+- Claude reads the form you give it. If the form already has answers, a name or hidden data
+  in it, Claude sees those before the skill can stop.
+- Claude Code can open any file it is allowed to: your profile, answer sheets, filled PDFs and
+  signature images. The skill tells it not to; nothing forces it. Asking Claude to "check my
+  filled form" sends your answers to it.
+- The names of your profile's rows are visible to Claude. Do not put private facts in a key
+  name (`child.diabetes`).
+- Files in iCloud-synced folders (Desktop, Documents, Numbers documents, photos) leave your
+  Mac for Apple's servers. Keep the forms folder and `~/.pesky-forms/` out of sync if that
+  matters to you.
+- The fill script's messages name questions and files, never answers. Pasting them into a chat
+  still shares those names.
+
+**Wrong or missing answers**
+- An empty sheet row means "use the profile". There is no way yet to force a profile-linked
+  blank to stay empty; delete the value in Preview afterward.
+- `--child 2` with a sheet that still holds the first child's typed answers mixes the two.
+  Each run overwrites `NAME-filled.pdf`, including any edits or signature added in Preview;
+  use `--out` to keep both.
+- Spreadsheets can strip leading zeros from ZIP codes and IDs and reformat dates. Check those.
+- Digit-box answers longer than the boxes are cut off. Long answers shrink to 6 pt and can clip.
+  Characters outside Latin-1 may not display.
+- Radio and choice answers are not validated: ticking two options of one question is allowed.
+- Signatures: a PDF signature takes the first stamp or ink mark in the file; one signature is
+  used for every signer; a box drawn too tall can overlap printed text.
+- Rotated or cropped pages, scans, password-protected PDFs and XFA-only forms are untested
+  or unsupported. XFA data is removed from forms that also have regular fields.
+- Next year's form is a new file: if its bytes differ, make a new kit.
+
+**Testing scope**
+- The scores above come from one run per form, on five digital forms, with synthetic answers
+  assigned by position. They show where answers land, not that every question was understood.
+- macOS only. Other platforms are untested.
 
 ## Related projects
 

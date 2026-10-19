@@ -1,6 +1,6 @@
 ---
 name: pesky-forms
-description: Fill PDF forms (school permission slips, field trips, camp, sports and medical forms, tax forms like the W-9), flat or fillable, without Claude seeing the answers. Claude reads only the blank form and writes an answer sheet plus a fill script; answers come from the person's sheet and their local family profile, and their saved signature and initials can be added, all on their Mac. Use when someone wants to fill out a PDF form and keep their family's details off AI services.
+description: Fill PDF forms (school permission slips, field trips, camp, sports and medical forms, tax forms like the W-9), flat or fillable, without sending the answers to Claude. Claude reads only the blank form and writes an answer sheet plus a fill script; answers come from the person's sheet and their local family profile, and their saved signature and initials can be added, all on their Mac. Use when someone wants to fill out a PDF form and keep their family's details off AI services.
 ---
 
 # pesky-forms

@@ -12,5 +12,5 @@ if not path.exists():
     sys.exit(f"No profile at {path}. Use the keys in profile-template.csv instead.")
 with open(path, newline="", encoding="utf-8-sig") as fh:
     keys = {re.sub(r"^child\d+\.", "child.", (r.get("Key") or "").strip()) for r in csv.DictReader(fh)}
-for k in sorted(k for k in keys if re.fullmatch(r"[a-z0-9_]+(\.[a-z0-9_]+)+", k)):  # a value typed into Key is never echoed
+for k in sorted(k for k in keys if re.fullmatch(r"[a-z0-9_]+(\.[a-z0-9_]+)+", k)):  # only key-shaped text; a value typed as a key could still show
     print(k)
