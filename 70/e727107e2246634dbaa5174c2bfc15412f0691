@@ -1,0 +1,30 @@
+skills/pesky-forms/scripts/make_kit.py
+  s_3c8d20d24bc248::t_2f5afe10e8236b 191-192,203-204
+  s_3c8d20d24bc248::t_1e454e7b4a265f 11,18-25
+  s_3c8d20d24bc248::t_fb8a3e8df4e019 26
+skills/pesky-forms/SKILL.md
+  s_3c8d20d24bc248::t_f22d3438256f1f 28
+tests/test_fill_script.py
+  s_3c8d20d24bc248::t_18d8b8b210d261 9
+  s_3c8d20d24bc248::t_3aed74f119b359 95
+  s_3c8d20d24bc248::t_441bb7a667ccf1 77-87
+skills/pesky-forms/scripts/filler.py
+  s_3c8d20d24bc248::t_1ef4753abfb0c1 359
+  s_3c8d20d24bc248::t_8e331e3bd48918 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "70e727107e2246634dbaa5174c2bfc15412f0691",
+  "prompts": {},
+  "sessions": {
+    "s_3c8d20d24bc248": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "08f93d04-7822-435b-8e3a-d5d315111a03",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "GeeksikhSecurity <gurvinder@sayvainc.com>"
+    }
+  }
+}
