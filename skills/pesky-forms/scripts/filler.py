@@ -14,6 +14,7 @@ The output is a fillable PDF: every blank is a real form field holding its answe
 person can still correct any value in Preview. A placed signature is a stamp they can move or delete.
 """
 import datetime
+import os
 import re
 import zlib
 
@@ -355,4 +356,5 @@ def fill(form_pdf, template, answers, out_pdf, signature=None, initials=None):
             NameObject("/DA"): TextStringObject("/Helv 0 Tf 0 g"), NameObject("/NeedAppearances"): BooleanObject(False)})
     with open(out_pdf, "wb") as fh:
         writer.write(fh)
+    os.chmod(out_pdf, 0o600)  # the filled PDF carries the person's own answers
     return filled, empty

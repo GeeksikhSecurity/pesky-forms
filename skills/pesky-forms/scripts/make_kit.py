@@ -8,11 +8,21 @@ The fill script embeds the template and the form's sha256, so it only fills that
 import csv
 import hashlib
 import json
+import os
 import re
 import sys
 from pathlib import Path
 
 HERE = Path(__file__).parent
+
+
+def csv_safe(value):
+    """Defuse CSV/formula injection (CWE-1236): a cell starting with =, +, -, @, tab or CR is
+    read as a live formula by Excel/Numbers. Question text and hints come from the PDF, which
+    may be untrusted, so prefix those triggers with a leading apostrophe to force plain text."""
+    if value and value[0] in ("=", "+", "-", "@", "\t", "\r"):
+        return "'" + value
+    return value
 
 SCRIPT = '''#!/usr/bin/env python3
 """Fill @@TITLE@@.
@@ -178,7 +188,8 @@ if __name__ == "__main__":
 def main(template_path, form, out, name):
     out.mkdir(parents=True, exist_ok=True)
     template = json.loads(Path(template_path).read_text())
-    with open(out / f"{name}-answers.csv", "w", newline="", encoding="utf-8") as fh:
+    answers_csv = out / f"{name}-answers.csv"
+    with open(answers_csv, "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
         w.writerow(["Question", "Your answer", "How to answer", "From your profile", "ID"])
         for f in template["fields"]:
@@ -189,7 +200,8 @@ def main(template_path, form, out, name):
                    }.get(f["kind"], f.get("hint", ""))
             if f.get("profile") and f["kind"] == "text":
                 how = (how + "; " if how else "") + "leave empty to use your profile, or type blank to keep it empty"
-            w.writerow([f["question"], "", how, f.get("profile", ""), f["id"]])
+            w.writerow([csv_safe(f["question"]), "", csv_safe(how), f.get("profile", ""), f["id"]])
+    os.chmod(answers_csv, 0o600)  # the sheet carries the person's own answers once filled in
     filler = (HERE / "filler.py").read_text().split('"""', 2)[2].strip()  # drop the module docstring
     text = SCRIPT
     # Form-derived text becomes data, never code: the title is reduced to plain characters, NAME
